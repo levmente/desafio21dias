@@ -5,14 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Desafio 21 Dias — Levanta e Vai</title>
 
-  <script>!function(i,n){i._plt=i._plt||(n&&n.timeOrigin?n.timeOrigin+n.now():Date.now())}(window,performance);</script>
-  <link rel="preload" href="https://scripts.converteai.net/e347e7c2-1f7d-4ff4-b4a9-7ce956f3b729/players/69b83dc4a10d9a398ac4cc7d/v4/player.js" as="script">
-  <link rel="preload" href="https://scripts.converteai.net/lib/js/smartplayer-wc/v4/smartplayer.js" as="script">
-  <link rel="preload" href="https://cdn.converteai.net/e347e7c2-1f7d-4ff4-b4a9-7ce956f3b729/69b83d8dfaf9397e233b3286/main.m3u8" as="fetch">
-  <link rel="dns-prefetch" href="https://cdn.converteai.net">
-  <link rel="dns-prefetch" href="https://scripts.converteai.net">
-  <link rel="dns-prefetch" href="https://images.converteai.net">
-  <link rel="dns-prefetch" href="https://api.vturb.com.br">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -186,11 +178,17 @@
         <img id="thumb_69b83dc4a10d9a398ac4cc7d" src="https://images.converteai.net/e347e7c2-1f7d-4ff4-b4a9-7ce956f3b729/players/69b83dc4a10d9a398ac4cc7d/thumbnail.jpg" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block">
         <div id="backdrop_69b83dc4a10d9a398ac4cc7d" style="position:absolute;top:0;left:0;width:100%;height:100%;-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)"></div>
       </div>
-      <script type="text/javascript" id="scr_69b83dc4a10d9a398ac4cc7d">
-        var s=document.createElement("script");
-        s.src="https://scripts.converteai.net/e347e7c2-1f7d-4ff4-b4a9-7ce956f3b729/players/69b83dc4a10d9a398ac4cc7d/v4/player.js";
-        s.async=true;
-        document.head.appendChild(s);
+      <script>
+        (function(){
+          var SCRIPT_ID = "vturb-player-script-69b83dc4a10d9a398ac4cc7d";
+          var SRC = "https://scripts.converteai.net/e347e7c2-1f7d-4ff4-b4a9-7ce956f3b729/players/69b83dc4a10d9a398ac4cc7d/v4/player.js";
+          if (document.getElementById(SCRIPT_ID)) return;
+          var s = document.createElement("script");
+          s.id = SCRIPT_ID;
+          s.src = SRC;
+          s.async = true;
+          document.body.appendChild(s);
+        })();
       </script>
     </div>
   </section>
@@ -421,104 +419,49 @@
   </div><!-- /page-content -->
 
   <script>
+    // Countdown
     (function(){
-      var REVEAL_AT = 427;
-      var revealed = false;
-      var playerWatch = null;
-      var pollWatch = null;
-
-      function revealPage(){
-        if(revealed) return;
-        revealed = true;
-
-        var el = document.getElementById('page-content');
-        if(!el) return;
-
-        el.style.display = 'block';
-        requestAnimationFrame(function(){
-          el.style.opacity = '1';
-        });
+      var K='desafio21_deadline', s=sessionStorage.getItem(K), d;
+      if(!s||Number(s)<Date.now()){d=Date.now()+86400000;sessionStorage.setItem(K,d)}else{d=Number(s)}
+      function tick(){
+        var diff=Math.max(0,d-Date.now());
+        var hE=document.getElementById('cd-h'),mE=document.getElementById('cd-m'),sE=document.getElementById('cd-s');
+        if(hE)hE.textContent=String(Math.floor(diff/3600000)).padStart(2,'0');
+        if(mE)mE.textContent=String(Math.floor(diff%3600000/60000)).padStart(2,'0');
+        if(sE)sE.textContent=String(Math.floor(diff%60000/1000)).padStart(2,'0');
       }
-
-      // Countdown
-      (function(){
-        var K = 'desafio21_deadline';
-        var saved = sessionStorage.getItem(K);
-        var deadline = (!saved || Number(saved) < Date.now())
-          ? Date.now() + 86400000
-          : Number(saved);
-
-        sessionStorage.setItem(K, String(deadline));
-
-        function tick(){
-          var diff = Math.max(0, deadline - Date.now());
-          var hE = document.getElementById('cd-h');
-          var mE = document.getElementById('cd-m');
-          var sE = document.getElementById('cd-s');
-
-          if(hE) hE.textContent = String(Math.floor(diff / 3600000)).padStart(2, '0');
-          if(mE) mE.textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
-          if(sE) sE.textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
-        }
-
-        tick();
-        setInterval(tick, 1000);
-      })();
-
-      // Eventos vindos do player/embed
-      window.addEventListener('message', function(e){
-        try{
-          var d = e.data;
-          if(!d || typeof d !== 'object') return;
-
-          if(d.event === 'showCta') revealPage();
-          if(d.event === 'timeupdate' && Number(d.time) >= REVEAL_AT) revealPage();
-          if(d.currentTime !== undefined && Number(d.currentTime) >= REVEAL_AT) revealPage();
-        }catch(err){}
-      });
-
-      // Tenta capturar a instância do smartplayer sem depender só de um evento
-      var tries = 0;
-      pollWatch = setInterval(function(){
-        tries += 1;
-
-        try{
-          var inst = window.smartplayer && window.smartplayer.instances;
-          if(inst && inst.length){
-            var p = inst[0];
-            clearInterval(pollWatch);
-
-            if(typeof p.on === 'function'){
-              p.on('timeupdate', function(){
-                try{
-                  if(Number(p.currentTime) >= REVEAL_AT) revealPage();
-                }catch(err){}
-              });
-
-              p.on('showCta', function(){
-                revealPage();
-              });
-            }
-
-            playerWatch = setInterval(function(){
-              try{
-                if(Number(p.currentTime) >= REVEAL_AT){
-                  clearInterval(playerWatch);
-                  revealPage();
-                }
-              }catch(err){}
-            }, 1000);
-          }
-        }catch(err){}
-
-        if(tries >= 120){
-          clearInterval(pollWatch);
-        }
-      }, 500);
-
-      // Fallback absoluto: mesmo se o player não emitir evento, libera após 7:07
-      setTimeout(revealPage, REVEAL_AT * 1000);
+      tick();setInterval(tick,1000);
     })();
+
+    // Reveal page at 7:07
+    var revealed=false;
+    function revealPage(){
+      if(revealed)return;revealed=true;
+      var el=document.getElementById('page-content');
+      if(!el)return;
+      el.style.display='block';
+      setTimeout(function(){el.style.opacity='1'},30);
+    }
+    window.addEventListener('message',function(e){
+      try{
+        var d=e.data;
+        if(!d||typeof d!=='object')return;
+        if(d.event==='showCta')revealPage();
+        if(d.event==='timeupdate'&&Number(d.time)>=427)revealPage();
+        if(d.currentTime!==undefined&&Number(d.currentTime)>=427)revealPage();
+      }catch(e){}
+    });
+    var _p=setInterval(function(){
+      try{
+        var inst=window.smartplayer&&window.smartplayer.instances;
+        if(inst&&inst.length){
+          clearInterval(_p);var p=inst[0];
+          var _t=setInterval(function(){try{if(p.currentTime>=427){clearInterval(_t);revealPage()}}catch(e){}},1000);
+          if(typeof p.on==='function'){p.on('timeupdate',function(){if(p.currentTime>=427)revealPage()});p.on('showCta',revealPage)}
+        }
+      }catch(e){}
+    },500);
+    setTimeout(revealPage,427000);
   </script>
 
 </body>
