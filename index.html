@@ -116,7 +116,9 @@
 
     /* VIDEO BLOCK */
     .video-section {
-      padding: 0 0 16px;
+      padding: 16px 0;
+      position: relative;
+      z-index: 1;
     }
     .video-wrap {
       position: relative;
@@ -738,10 +740,9 @@
 
   <!-- VIDEO -->
   <section class="video-section">
-    <div style="max-width:400px;margin:0 auto;width:100%;">
-    <div id="vid_69b83dc4a10d9a398ac4cc7d" style="position:relative;width:100%;padding:177.78% 0 0;overflow:hidden;background:#000;border-radius:16px;">
+    <div id="vid_69b83dc4a10d9a398ac4cc7d" style="position:relative;width:100%;max-width:400px;margin:0 auto;padding:177.78% 0 0;">
       <img id="thumb_69b83dc4a10d9a398ac4cc7d" src="https://images.converteai.net/e347e7c2-1f7d-4ff4-b4a9-7ce956f3b729/players/69b83dc4a10d9a398ac4cc7d/thumbnail.jpg" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block">
-    </div>
+      <div id="backdrop_69b83dc4a10d9a398ac4cc7d" style="position:absolute;top:0;left:0;width:100%;height:100%;-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)"></div>
     </div>
     <script type="text/javascript" id="scr_69b83dc4a10d9a398ac4cc7d">
       var s=document.createElement("script");
@@ -751,7 +752,7 @@
     </script>
   </section>
 
-  <div id="page-content" style="display:none;opacity:0;transition:opacity 0.8s ease;">
+  <div id="page-content">
 
     <hr class="divider" />
 
@@ -1090,10 +1091,13 @@
     // Countdown timer
     (function() {
       var KEY = 'desafio21_deadline';
-      var deadline = Number(sessionStorage.getItem(KEY)) || 0;
-      if (!deadline || deadline < Date.now()) {
+      var stored = sessionStorage.getItem(KEY);
+      var deadline;
+      if (!stored || Number(stored) < Date.now()) {
         deadline = Date.now() + 24 * 60 * 60 * 1000;
-        sessionStorage.setItem(KEY, deadline);
+        sessionStorage.setItem(KEY, String(deadline));
+      } else {
+        deadline = Number(stored);
       }
       function tick() {
         var diff = Math.max(0, deadline - Date.now());
@@ -1111,57 +1115,49 @@
       setInterval(tick, 1000);
     })();
 
-    // Reveal page at 7:07 (427s)
+    // Reveal page at 7m07s
     var REVEAL_TIME = 427;
     var revealed = false;
 
     function revealPage() {
       if (revealed) return;
       revealed = true;
-      var content = document.getElementById('page-content');
-      if (!content) return;
-      content.style.display = 'block';
-      setTimeout(function() { content.style.opacity = '1'; }, 30);
+      var el = document.getElementById('page-content');
+      if (!el) return;
+      el.style.display = 'block';
+      setTimeout(function(){ el.style.opacity = '1'; }, 30);
     }
 
-    // Method 1: postMessage from vturb iframe
+    // Method 1: postMessage from vturb
     window.addEventListener('message', function(e) {
       try {
         var d = e.data;
         if (!d || typeof d !== 'object') return;
         if (d.event === 'showCta') { revealPage(); return; }
         if (d.event === 'timeupdate' && Number(d.time) >= REVEAL_TIME) { revealPage(); return; }
-        if (d.currentTime !== undefined && Number(d.currentTime) >= REVEAL_TIME) { revealPage(); return; }
-      } catch(err) {}
+        if (typeof d.currentTime !== 'undefined' && Number(d.currentTime) >= REVEAL_TIME) { revealPage(); return; }
+      } catch(e) {}
     });
 
-    // Method 2: Poll smartplayer instance directly (most reliable for vturb)
-    var playerCheckInterval = setInterval(function() {
+    // Method 2: poll smartplayer instance
+    var _poll = setInterval(function() {
       try {
-        if (window.smartplayer && window.smartplayer.instances && window.smartplayer.instances.length > 0) {
-          var p = window.smartplayer.instances[0];
-          clearInterval(playerCheckInterval);
-          // Poll currentTime directly since .on() may not be available
-          var timeCheck = setInterval(function() {
-            try {
-              if (p.currentTime >= REVEAL_TIME) {
-                clearInterval(timeCheck);
-                revealPage();
-              }
-            } catch(e) {}
+        var instances = window.smartplayer && window.smartplayer.instances;
+        if (instances && instances.length) {
+          clearInterval(_poll);
+          var p = instances[0];
+          var _t = setInterval(function() {
+            try { if (p.currentTime >= REVEAL_TIME) { clearInterval(_t); revealPage(); } } catch(e){}
           }, 1000);
-          // Also try event binding if available
           if (typeof p.on === 'function') {
-            p.on('timeupdate', function() {
-              if (p.currentTime >= REVEAL_TIME) revealPage();
-            });
+            p.on('timeupdate', function(){ if(p.currentTime >= REVEAL_TIME) revealPage(); });
             p.on('showCta', revealPage);
           }
         }
-      } catch(err) {}
+      } catch(e) {}
     }, 500);
 
-    // Fallback: hard timer at exactly 7:07 from page load
+    // Fallback timer
     setTimeout(revealPage, REVEAL_TIME * 1000);
   </script>
 
