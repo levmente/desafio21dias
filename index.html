@@ -258,12 +258,17 @@
     .print-frame {
       padding: 14px;
       background: rgba(255,255,255,.02);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .print-card img {
       width: 100%;
       height: auto;
+      max-height: 760px;
       display: block;
       object-fit: contain;
+      object-position: center center;
       border-radius: 18px;
       background: #fff;
     }
@@ -308,7 +313,7 @@
 
     .authority-grid {
       display: grid;
-      grid-template-columns: 1.02fr .98fr;
+      grid-template-columns: 1fr 420px;
       gap: 30px;
       align-items: center;
     }
@@ -317,33 +322,36 @@
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin: 20px 0 0;
+      margin: 22px 0 0;
     }
     .stat {
-      padding: 12px 14px;
-      border-radius: 16px;
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.03);
+      padding: 12px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(197,126,255,.22);
+      background: linear-gradient(180deg, rgba(194,113,255,.14), rgba(122,56,214,.08));
       font-size: 14px;
-      color: #f7f3ff;
-      font-weight: 700;
+      color: #fff7ff;
+      font-weight: 800;
+      box-shadow: 0 8px 24px rgba(148, 70, 255, .14);
     }
     .authority-photo {
-      background: linear-gradient(180deg, rgba(41,22,77,.35), rgba(13,8,24,.65));
+      background: linear-gradient(180deg, rgba(41,22,77,.24), rgba(13,8,24,.42));
       border: 1px solid var(--stroke);
       border-radius: 28px;
-      min-height: 460px;
+      min-height: 380px;
       display: flex;
       justify-content: center;
       align-items: end;
       overflow: hidden;
       box-shadow: var(--shadow);
-      padding: 20px 16px 0;
+      padding: 10px 10px 0;
     }
     .authority-photo img {
-      max-height: 430px;
+      max-height: 410px;
       width: auto;
       object-fit: contain;
+      transform: scale(1.18);
+      transform-origin: bottom center;
     }
 
     .offer-card { padding: 32px; }
@@ -438,6 +446,8 @@
         grid-template-columns: 1fr 1fr;
       }
       .reveal-cta { top: 52px; }
+      .authority-grid { grid-template-columns: 1fr; }
+      .authority-photo { max-width: 420px; width: 100%; margin: 0 auto; }
     }
     @media (max-width: 720px) {
       .section { padding: 64px 0; }
@@ -451,9 +461,10 @@
         align-items: stretch;
       }
       .btn { width: 100%; }
-      .authority-photo { min-height: 340px; }
-      .authority-photo img { max-height: 300px; }
+      .authority-photo { min-height: 300px; }
+      .authority-photo img { max-height: 320px; transform: scale(1.12); }
       .hidden-mobile { display: none; }
+      .print-card img { max-height: none; }
     }
   </style>
 
@@ -613,7 +624,7 @@
       <div class="container">
         <div class="eyebrow">Prova real</div>
         <h2 class="section-title">Veja o que está acontecendo com quem já entrou.</h2>
-        <p class="section-intro">Relatos reais, com texto 100% legível, de quem começou travado, emocionalmente bagunçado, e hoje já percebe mudança na forma de agir, pensar e se relacionar.</p>
+        <p class="section-intro">Relatos reais, centralizados e legíveis, de quem começou travado, emocionalmente bagunçado, e hoje já percebe mudança na forma de agir, pensar e se relacionar.</p>
 
         <div class="prints-wrap">
           <div class="print-card">
@@ -699,7 +710,7 @@
               </ul>
 
               <div class="guarantee">
-                <strong>Garantia e segurança:</strong> se não fizer sentido pra você, existe garantia. Você entra sem carregar o risco sozinho.
+                <strong>Garantia de 7 dias:</strong> se não fizer sentido pra você, é só pedir reembolso dentro desse prazo. Você entra sem risco.
               </div>
             </div>
 
@@ -709,7 +720,7 @@
               <div class="new">R$147 <small>à vista</small></div>
               <div class="installments">ou em parcelas no checkout</div>
               <a class="btn btn-primary kiwify-link" href="https://pay.kiwify.com.br/SEU-CHECKOUT" style="width:100%;">Quero parar de viver fora de controle</a>
-              <div class="micro-proof" style="margin-top:14px;">Acesso imediato • garantia • jornada validada em 21 dias</div>
+              <div class="micro-proof" style="margin-top:14px;">Acesso imediato • garantia de 7 dias • jornada validada em 21 dias</div>
             </div>
           </div>
         </div>
