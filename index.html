@@ -8,7 +8,6 @@
   <style>
     :root {
       --bg: #070312;
-      --bg-2: #0d0620;
       --card: rgba(17, 10, 37, .78);
       --stroke: rgba(179, 110, 255, .18);
       --text: #f8f5ff;
@@ -104,7 +103,7 @@
       border-radius: 18px;
       font-size: 16px; font-weight: 800;
       border: 1px solid rgba(255,255,255,.08);
-      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+      transition: transform .18s ease, box-shadow .18s ease;
       cursor: pointer;
       box-shadow: var(--shadow);
     }
@@ -113,11 +112,16 @@
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
       color: white;
     }
-    .btn-secondary {
-      background: rgba(255,255,255,.04);
-      color: var(--text);
-      box-shadow: none;
+    .helper-link {
+      display: inline-block;
+      margin-top: 10px;
+      color: #d8ccf1;
+      font-size: 15px;
+      font-weight: 600;
+      opacity: .9;
+      border-bottom: 1px solid rgba(216,204,241,.28);
     }
+    .helper-link:hover { opacity: 1; }
     .micro-proof {
       margin-top: 18px;
       color: #bdaedd;
@@ -136,7 +140,6 @@
       background: #0c0519;
       aspect-ratio: 9 / 16;
     }
-
     .reveal-block {
       display: none;
       opacity: 0;
@@ -175,7 +178,6 @@
       max-width: 760px;
       margin: 0 0 34px;
     }
-
     .pain-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -249,11 +251,11 @@
       align-items: start;
     }
     .print-card {
-      overflow: hidden;
       border-radius: 26px;
       background: rgba(10,6,20,.85);
       border: 1px solid var(--stroke);
       box-shadow: var(--shadow);
+      overflow: hidden;
     }
     .print-frame {
       padding: 14px;
@@ -263,14 +265,16 @@
       align-items: center;
     }
     .print-card img {
-      width: 100%;
+      width: auto;
+      max-width: 100%;
       height: auto;
-      max-height: 760px;
+      max-height: none;
       display: block;
       object-fit: contain;
       object-position: center center;
       border-radius: 18px;
       background: #fff;
+      margin: 0 auto;
     }
     .print-caption {
       padding: 16px 18px 18px;
@@ -338,19 +342,19 @@
       background: linear-gradient(180deg, rgba(41,22,77,.24), rgba(13,8,24,.42));
       border: 1px solid var(--stroke);
       border-radius: 28px;
-      min-height: 380px;
+      min-height: 340px;
       display: flex;
       justify-content: center;
       align-items: end;
       overflow: hidden;
       box-shadow: var(--shadow);
-      padding: 10px 10px 0;
+      padding: 4px 4px 0;
     }
     .authority-photo img {
-      max-height: 410px;
+      max-height: 420px;
       width: auto;
       object-fit: contain;
-      transform: scale(1.18);
+      transform: scale(1.28);
       transform-origin: bottom center;
     }
 
@@ -462,9 +466,8 @@
       }
       .btn { width: 100%; }
       .authority-photo { min-height: 300px; }
-      .authority-photo img { max-height: 320px; transform: scale(1.12); }
+      .authority-photo img { max-height: 320px; transform: scale(1.18); }
       .hidden-mobile { display: none; }
-      .print-card img { max-height: none; }
     }
   </style>
 
@@ -499,8 +502,8 @@
 
         <div class="button-row">
           <a class="btn btn-primary kiwify-link hero-offer-btn" href="https://pay.kiwify.com.br/SEU-CHECKOUT" style="display:none;">Quero assumir o controle da minha mente</a>
-          <a class="btn btn-secondary" href="#dor">Entender por que isso acontece</a>
         </div>
+        <a href="#dor" class="helper-link">Entender por que isso acontece</a>
         <div class="micro-proof">Mais de <strong>+480 mil pessoas</strong> acompanham o Julio e milhares já passaram pela jornada.</div>
       </div>
 
@@ -624,7 +627,7 @@
       <div class="container">
         <div class="eyebrow">Prova real</div>
         <h2 class="section-title">Veja o que está acontecendo com quem já entrou.</h2>
-        <p class="section-intro">Relatos reais, centralizados e legíveis, de quem começou travado, emocionalmente bagunçado, e hoje já percebe mudança na forma de agir, pensar e se relacionar.</p>
+        <p class="section-intro">Relatos reais com texto inteiro, centralizado e legível — sem corte lateral.</p>
 
         <div class="prints-wrap">
           <div class="print-card">
